@@ -18,7 +18,7 @@ class PinterestLayout: UICollectionViewLayout {
     var numberOfColumns = 2
     var cellPadding: CGFloat = 10
     
-    fileprivate var cache = [UICollectionViewLayoutAttributes]()
+    fileprivate var attributesStorage = [UICollectionViewLayoutAttributes]()
     
     fileprivate var contentHeight: CGFloat = 0
     
@@ -35,7 +35,7 @@ class PinterestLayout: UICollectionViewLayout {
     }
     
     override func prepare() {
-      guard cache.isEmpty, let collectionView = collectionView else {
+      guard attributesStorage.isEmpty, let collectionView = collectionView else {
         return
       }
       
@@ -64,7 +64,7 @@ class PinterestLayout: UICollectionViewLayout {
         
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         attributes.frame = insetFrame
-        cache.append(attributes)
+        attributesStorage.append(attributes)
         
         contentHeight = max(contentHeight, frame.maxY)
         yOffset[column] = yOffset[column] + cellHeight
@@ -95,7 +95,7 @@ class PinterestLayout: UICollectionViewLayout {
       
       var visibleLayoutAttributes = [UICollectionViewLayoutAttributes]()
       
-      for attributes in cache {
+      for attributes in attributesStorage {
         if attributes.frame.intersects(rect) {
           visibleLayoutAttributes.append(attributes)
         }
@@ -105,6 +105,6 @@ class PinterestLayout: UICollectionViewLayout {
     }
     
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-      return cache[indexPath.item]
+      return attributesStorage[indexPath.item]
     }
 }
